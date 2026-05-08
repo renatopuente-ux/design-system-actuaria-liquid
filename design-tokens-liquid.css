@@ -174,4 +174,115 @@
   --status-warning: #f59e0b;
   --status-danger:  #ef4444;
   --status-info:    var(--brand-indigo);
+
+  /* ─── Page / Aurora (dark defaults) ────────────────────────────── */
+  --page-bg:        #07102a;
+  --page-bg-neu:    #1e2645;
+  --page-bg-dark:   #050e24;
+  --aurora-c1: rgba(76,100,217,.42);
+  --aurora-c2: rgba(139,92,246,.28);
+  --aurora-c3: rgba(21,31,71,.82);
+  --aurora-c4: rgba(34,211,238,.12);
+  --aurora-c5: rgba(76,100,217,.18);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES
+   Activar con: <html data-theme="light">
+═══════════════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* ─── Page backgrounds ──────────────────────────────────────────── */
+  --page-bg:      #eef0fa;
+  --page-bg-neu:  #e4e8f2;
+  --page-bg-dark: #dde1f0;
+
+  /* ─── Aurora tints (suave, pastel) ─────────────────────────────── */
+  --aurora-c1: rgba(76,100,217,.18);
+  --aurora-c2: rgba(139,92,246,.12);
+  --aurora-c3: rgba(238,240,250,.95);
+  --aurora-c4: rgba(34,211,238,.07);
+  --aurora-c5: rgba(76,100,217,.08);
+
+  /* ─── Text ──────────────────────────────────────────────────────── */
+  --text-primary:   rgba(10, 16, 48, 0.92);
+  --text-secondary: rgba(10, 16, 48, 0.58);
+  --text-tertiary:  rgba(10, 16, 48, 0.35);
+  --text-brand:     #3045c2;
+  --text-success:   #15803d;
+  --text-warning:   #b45309;
+  --text-danger:    #b91c1c;
+
+  /* ─── Glass surfaces ────────────────────────────────────────────── */
+  --glass-nav:      rgba(238, 240, 250, 0.82);
+  --glass-card:     rgba(255, 255, 255, 0.55);
+  --glass-card-md:  rgba(255, 255, 255, 0.70);
+  --glass-card-lg:  rgba(255, 255, 255, 0.84);
+  --glass-modal:    rgba(245, 247, 255, 0.92);
+  --glass-brand:    rgba(76, 100, 217, 0.10);
+  --glass-success:  rgba(22, 163, 74, 0.12);
+  --glass-warning:  rgba(180, 83, 9, 0.12);
+  --glass-danger:   rgba(185, 28, 28, 0.12);
+
+  /* ─── Glass borders ─────────────────────────────────────────────── */
+  --glass-border-xs:    1px solid rgba(76, 100, 217, 0.10);
+  --glass-border-sm:    1px solid rgba(76, 100, 217, 0.16);
+  --glass-border-md:    1px solid rgba(76, 100, 217, 0.26);
+  --glass-border-lg:    1px solid rgba(76, 100, 217, 0.38);
+  --glass-border-brand: 1px solid rgba(76, 100, 217, 0.42);
+
+  /* ─── Glass shadows (suaves, con tinte de marca) ────────────────── */
+  --glass-shadow-sm: 0  4px 16px rgba(76,100,217,.08), 0 1px  4px rgba(0,0,0,.04);
+  --glass-shadow-md: 0  8px 32px rgba(76,100,217,.12), 0 2px  8px rgba(0,0,0,.05);
+  --glass-shadow-lg: 0 16px 64px rgba(76,100,217,.16), 0 4px 16px rgba(0,0,0,.06);
+  --glass-shadow-xl: 0 32px 80px rgba(76,100,217,.20), 0 8px 24px rgba(0,0,0,.07);
+
+  /* ─── Glass shine (más opaco en claro para visibilidad) ─────────── */
+  --glass-shine-top: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  --glass-shine-diag: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.18) 40%,
+    transparent 70%
+  );
+  --glass-refraction: linear-gradient(
+    135deg,
+    rgba(76, 100, 217, 0.14) 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(21, 31, 71, 0.06) 100%
+  );
+  --glass-iridescent: linear-gradient(
+    135deg,
+    rgba(76, 100, 217, 0.18) 0%,
+    rgba(139, 92, 246, 0.12) 30%,
+    rgba(255, 255, 255, 0.40) 60%,
+    rgba(34, 211, 238, 0.10) 100%
+  );
+
+  /* ─── Neuformismo claro ─────────────────────────────────────────── */
+  --neu-bg:    #e4e8f2;
+  --neu-bg-2:  #ecf0f9;
+  --neu-bg-3:  #dde1ed;
+  --neu-dark:  #c2c8d8;
+  --neu-light: #ffffff;
+
+  /* ─── Neu shadows (recalculadas para fondo claro) ───────────────── */
+  --neu-xs:  3px  3px  6px  var(--neu-dark), -3px  -3px  6px  var(--neu-light);
+  --neu-sm:  4px  4px  8px  var(--neu-dark), -4px  -4px  8px  var(--neu-light);
+  --neu-md:  8px  8px 16px  var(--neu-dark), -8px  -8px 16px  var(--neu-light);
+  --neu-lg: 12px 12px 24px  var(--neu-dark),-12px -12px 24px  var(--neu-light);
+  --neu-xl: 20px 20px 40px  var(--neu-dark),-20px -20px 40px  var(--neu-light);
+  --neu-inset:    inset 4px  4px  8px var(--neu-dark), inset -4px  -4px  8px var(--neu-light);
+  --neu-inset-md: inset 6px  6px 12px var(--neu-dark), inset -6px  -6px 12px var(--neu-light);
+  --neu-inset-lg: inset 8px  8px 18px var(--neu-dark), inset -8px  -8px 18px var(--neu-light);
+
+  /* ─── Glow (atenuado en claro) ──────────────────────────────────── */
+  --neu-glow-brand:   0 0 16px rgba(76, 100, 217, 0.22);
+  --neu-glow-success: 0 0 16px rgba(22, 163, 74, 0.20);
+  --neu-glow-danger:  0 0 16px rgba(185, 28, 28, 0.20);
 }
