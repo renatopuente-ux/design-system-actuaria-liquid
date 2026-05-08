@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actuaria DS v3 — Liquid Glass × Neuformismo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="design-tokens-liquid.css">
+  <style>
+    /* ─── Reset ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: #09102a;
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── Aurora background ───────────────────────────────── */
+    .aurora {
+      position: relative;
+      background: #09102a;
+    }
+    .aurora::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 90% 60% at 15% 15%, rgba(76,100,217,.38) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 50% at 85% 80%, rgba(139,92,246,.26) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 50% 40%, rgba(21,31,71,.75) 0%, transparent 80%),
+        radial-gradient(ellipse 40% 30% at 75% 10%, rgba(34,211,238,.13) 0%, transparent 50%);
+    }
+    .aurora > * { position: relative; z-index: 1; }
+
+    /* ─── Neu background ──────────────────────────────────── */
+    .neu-section { background: var(--neu-bg); }
+
+    /* ─── Layout ──────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--sp-24); }
+    .section { padding: var(--sp-80) 0; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-24); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-24); }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-24); }
+    @media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+    @media (min-width: 901px) and (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-8  { gap: var(--sp-8);  }
+    .gap-12 { gap: var(--sp-12); }
+    .gap-16 { gap: var(--sp-16); }
+    .gap-24 { gap: var(--sp-24); }
+    .mb-8   { margin-bottom: var(--sp-8);  }
+    .mb-12  { margin-bottom: var(--sp-12); }
+    .mb-16  { margin-bottom: var(--sp-16); }
+    .mb-20  { margin-bottom: var(--sp-20); }
+    .mb-24  { margin-bottom: var(--sp-24); }
+    .mb-32  { margin-bottom: var(--sp-32); }
+    .mt-24  { margin-top:    var(--sp-24); }
+    .mt-32  { margin-top:    var(--sp-32); }
+    .w-100  { width: 100%; }
+    .col-span-2 { grid-column: span 2; }
+
+    /* ─── Section header ──────────────────────────────────── */
+    .section-eyebrow {
+      display: inline-flex; align-items: center; gap: var(--sp-8);
+      font-size: var(--fs-xs); font-weight: var(--fw-semi);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-brand); margin-bottom: var(--sp-12);
+    }
+    .section-eyebrow span { display: block; width: 24px; height: 1px; background: currentColor; opacity: .5; }
+    .section-title { font-size: var(--fs-3xl); font-weight: var(--fw-bold); line-height: 1.2; margin-bottom: var(--sp-8); }
+    .section-desc  { font-size: var(--fs-md); color: var(--text-secondary); line-height: 1.65; max-width: 540px; margin-bottom: var(--sp-48); }
+
+    /* ─── Divider ─────────────────────────────────────────── */
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); }
+
+    /* ══════════════════════════════════════════════════════
+       GLASS NAV
+    ══════════════════════════════════════════════════════ */
+    .glass-nav {
+      position: sticky; top: 0; z-index: 100;
+      padding: var(--sp-14, 14px) var(--sp-24);
+      background: var(--glass-nav);
+      backdrop-filter: var(--blur-md);
+      -webkit-backdrop-filter: var(--blur-md);
+      border-bottom: var(--glass-border-xs);
+      box-shadow: var(--glass-shadow-sm);
+    }
+    .glass-nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: var(--sp-12); }
+    .nav-logo-text { font-size: 20px; font-weight: var(--fw-display); letter-spacing: -.03em; }
+    .nav-logo-dot { color: var(--brand-indigo); }
+    .nav-version {
+      padding: 3px 10px;
+      background: var(--glass-brand);
+      border: var(--glass-border-brand);
+      border-radius: var(--r-full);
+      font-size: 10px; font-weight: var(--fw-semi); letter-spacing: .08em;
+      color: var(--text-brand);
+      backdrop-filter: var(--blur-xs);
+    }
+    .nav-links { display: flex; align-items: center; gap: var(--sp-4, 4px); list-style: none; }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: var(--fs-base); font-weight: var(--fw-medium);
+      padding: var(--sp-8) var(--sp-12); border-radius: var(--r-md);
+      transition: color var(--t-fast) var(--ease-glass), background var(--t-fast) var(--ease-glass);
+    }
+    .nav-links a:hover { color: var(--text-primary); background: rgba(255,255,255,.08); }
+    .nav-cta { display: flex; gap: var(--sp-8); }
+
+    /* ══════════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════════ */
+    .hero { padding: var(--sp-96) 0 var(--sp-80); text-align: center; }
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: var(--sp-8);
+      padding: var(--sp-8) var(--sp-20);
+      background: var(--glass-brand);
+      backdrop-filter: var(--blur-sm);
+      border: var(--glass-border-brand);
+      border-radius: var(--r-full);
+      font-size: var(--fs-xs); font-weight: var(--fw-semi); letter-spacing: .10em; text-transform: uppercase;
+      color: var(--text-brand); margin-bottom: var(--sp-32);
+    }
+    .hero-pill::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--brand-indigo); box-shadow: 0 0 8px var(--brand-indigo);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--brand-indigo); }
+      50%       { opacity: .5; box-shadow: 0 0 16px var(--brand-indigo); }
+    }
+    .hero-title {
+      font-size: clamp(44px, 6.5vw, 80px);
+      font-weight: var(--fw-display);
+      line-height: 1.02; letter-spacing: -.04em;
+      margin-bottom: var(--sp-24);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #8aa5ff 0%, #b78bfa 45%, #38d4f4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: var(--fs-lg); color: var(--text-secondary);
+      line-height: 1.65; max-width: 560px; margin: 0 auto var(--sp-48);
+    }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: var(--sp-16); flex-wrap: wrap; }
+
+    /* ══════════════════════════════════════════════════════
+       BUTTONS
+    ══════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-8);
+      padding: var(--sp-12) var(--sp-24); min-height: 44px;
+      font-family: var(--font-sans); font-size: var(--fs-base);
+      font-weight: var(--fw-semi); line-height: 1;
+      border: none; border-radius: var(--r-xl); cursor: pointer;
+      text-decoration: none; white-space: nowrap;
+      transition: all var(--t-base) var(--ease-glass);
+      position: relative; overflow: hidden;
+    }
+    .btn-sm  { font-size: var(--fs-sm);  padding: var(--sp-8)  var(--sp-16); min-height: 36px; }
+    .btn-lg  { font-size: var(--fs-md);  padding: var(--sp-16) var(--sp-32); min-height: 52px; }
+    .btn-pill { border-radius: var(--r-full); }
+
+    /* Liquid Glass solid */
+    .btn-glass-solid {
+      background: linear-gradient(135deg, rgba(90,112,230,.92), rgba(58,79,184,.92));
+      backdrop-filter: var(--blur-sm);
+      border: var(--glass-border-brand);
+      color: #fff;
+      box-shadow: var(--glass-shadow-sm), 0 0 28px rgba(76,100,217,.38),
+                  inset 0 1px 0 rgba(255,255,255,.28);
+    }
+    .btn-glass-solid::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: var(--glass-shine-top); pointer-events: none;
+    }
+    .btn-glass-solid:hover {
+      box-shadow: var(--glass-shadow-md), 0 0 40px rgba(76,100,217,.52),
+                  inset 0 1px 0 rgba(255,255,255,.32);
+      transform: translateY(-1px);
+    }
+    .btn-glass-solid:active { transform: translateY(0); }
+
+    /* Liquid Glass translucent */
+    .btn-glass {
+      background: var(--glass-brand);
+      backdrop-filter: var(--blur-sm);
+      -webkit-backdrop-filter: var(--blur-sm);
+      border: var(--glass-border-brand);
+      color: var(--text-primary);
+      box-shadow: var(--glass-shadow-sm), inset 0 1px 0 rgba(255,255,255,.18);
+    }
+    .btn-glass::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: var(--glass-shine-top); pointer-events: none;
+    }
+    .btn-glass:hover {
+      background: rgba(76,100,217,.38);
+      box-shadow: var(--glass-shadow-md), 0 0 20px rgba(76,100,217,.25),
+                  inset 0 1px 0 rgba(255,255,255,.24);
+      transform: translateY(-1px);
+    }
+
+    /* Ghost */
+    .btn-ghost {
+      background: rgba(255,255,255,.05);
+      backdrop-filter: var(--blur-xs);
+      border: var(--glass-border-sm);
+      color: var(--text-secondary);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.10); color: var(--text-primary); border: var(--glass-border-md); }
+
+    /* Neumorphic */
+    .btn-neu {
+      background: var(--neu-bg);
+      border: 1px solid rgba(255,255,255,.05);
+      color: var(--text-primary);
+      box-shadow: var(--neu-md);
+    }
+    .btn-neu:hover { box-shadow: var(--neu-lg), var(--neu-glow-brand); color: var(--text-brand); transform: translateY(-1px); }
+    .btn-neu:active { box-shadow: var(--neu-inset); transform: translateY(0); }
+
+    /* Neumorphic brand */
+    .btn-neu-brand {
+      background: linear-gradient(135deg, #3a4fb8, #4c64d9);
+      border: none; color: #fff;
+      box-shadow: 6px 6px 16px var(--neu-dark), -2px -2px 8px rgba(76,100,217,.28),
+                  0 0 24px rgba(76,100,217,.22);
+    }
+    .btn-neu-brand:hover {
+      box-shadow: 8px 8px 20px var(--neu-dark), -2px -2px 10px rgba(76,100,217,.32),
+                  0 0 36px rgba(76,100,217,.38);
+      transform: translateY(-2px);
+    }
+    .btn-neu-brand:active {
+      box-shadow: inset 4px 4px 10px var(--neu-dark), inset -2px -2px 6px rgba(76,100,217,.20);
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       GLASS CARD
+    ══════════════════════════════════════════════════════ */
+    .glass-card {
+      background: var(--glass-card);
+      backdrop-filter: var(--blur-md);
+      -webkit-backdrop-filter: var(--blur-md);
+      border: var(--glass-border-sm);
+      border-radius: var(--r-xl);
+      box-shadow: var(--glass-shadow-md);
+      padding: var(--sp-24);
+      position: relative; overflow: hidden;
+      transition: transform var(--t-base) var(--ease-spring), box-shadow var(--t-base) var(--ease-glass);
+    }
+    .glass-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+    }
+    .glass-card::after {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 55%;
+      background: var(--glass-shine-diag); pointer-events: none;
+    }
+    .glass-card:hover { transform: translateY(-4px); box-shadow: var(--glass-shadow-lg); border-color: rgba(255,255,255,.24); }
+
+    .glass-card-brand  { background: rgba(76,100,217,.18); border: var(--glass-border-brand); }
+    .glass-card-brand::after  { background: var(--glass-refraction); }
+    .glass-card-iridescent::after { background: var(--glass-iridescent); }
+    .glass-card-modal {
+      background: var(--glass-modal);
+      backdrop-filter: var(--blur-xl);
+      -webkit-backdrop-filter: var(--blur-xl);
+      border: var(--glass-border-md);
+      border-radius: var(--r-2xl);
+      box-shadow: var(--glass-shadow-xl), 0 0 80px rgba(76,100,217,.14);
+    }
+
+    /* ─── Neu Card ───────────────────────────────────────── */
+    .neu-card {
+      background: var(--neu-bg);
+      border: 1px solid rgba(255,255,255,.04);
+      border-radius: var(--r-xl);
+      box-shadow: var(--neu-md);
+      padding: var(--sp-24);
+      transition: all var(--t-base) var(--ease-spring);
+    }
+    .neu-card:hover { box-shadow: var(--neu-lg); transform: translateY(-2px); }
+    .neu-card-pressed { box-shadow: var(--neu-inset-md); background: var(--neu-bg-2); }
+
+    /* ══════════════════════════════════════════════════════
+       METRIC / KPI CARDS
+    ══════════════════════════════════════════════════════ */
+    .metric-icon {
+      width: 44px; height: 44px; border-radius: var(--r-md);
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+      margin-bottom: var(--sp-16);
+    }
+    .metric-icon-glass { background: var(--glass-brand); border: var(--glass-border-brand); backdrop-filter: var(--blur-xs); }
+    .metric-value { font-size: var(--fs-3xl); font-weight: var(--fw-display); letter-spacing: -.03em; line-height: 1; margin-bottom: var(--sp-4); }
+    .metric-label { font-size: var(--fs-sm); color: var(--text-secondary); font-weight: var(--fw-medium); margin-bottom: var(--sp-12); }
+    .metric-delta {
+      display: inline-flex; align-items: center; gap: var(--sp-4);
+      font-size: var(--fs-xs); font-weight: var(--fw-semi);
+      padding: 2px 8px; border-radius: var(--r-full);
+    }
+    .delta-up   { color: var(--text-success); background: var(--glass-success); }
+    .delta-down { color: var(--text-danger);  background: var(--glass-danger);  }
+    .delta-warn { color: var(--text-warning); background: var(--glass-warning); }
+
+    /* ══════════════════════════════════════════════════════
+       BADGES
+    ══════════════════════════════════════════════════════ */
+    .badge {
+      display: inline-flex; align-items: center; gap: var(--sp-4);
+      padding: 3px 10px; font-size: 11px; font-weight: var(--fw-semi);
+      letter-spacing: .05em; border-radius: var(--r-full); white-space: nowrap;
+    }
+    .badge-brand   { background: var(--glass-brand);   border: var(--glass-border-brand);                          color: var(--text-brand);   }
+    .badge-success { background: var(--glass-success); border: 1px solid rgba(34,197,94,.30);                      color: var(--text-success); }
+    .badge-warning { background: var(--glass-warning); border: 1px solid rgba(251,191,36,.30);                     color: var(--text-warning); }
+    .badge-danger  { background: var(--glass-danger);  border: 1px solid rgba(239,68,68,.30);                      color: var(--text-danger);  }
+    .badge-neu     { background: var(--neu-bg);         box-shadow: var(--neu-xs); border: 1px solid rgba(255,255,255,.05); color: var(--text-secondary); padding: 4px 12px; }
+
+    /* ══════════════════════════════════════════════════════
+       INPUTS
+    ══════════════════════════════════════════════════════ */
+    .input-group { display: flex; flex-direction: column; gap: var(--sp-8); }
+    .input-label { font-size: var(--fs-sm); font-weight: var(--fw-semi); color: var(--text-secondary); letter-spacing: .02em; }
+
+    .input-glass {
+      width: 100%; padding: var(--sp-12) var(--sp-16); min-height: 44px;
+      font-family: var(--font-sans); font-size: var(--fs-base); color: var(--text-primary);
+      background: var(--glass-card); backdrop-filter: var(--blur-sm);
+      border: var(--glass-border-sm); border-radius: var(--r-lg); outline: none;
+      transition: all var(--t-base) var(--ease-glass);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.20);
+    }
+    .input-glass::placeholder { color: var(--text-tertiary); }
+    .input-glass:focus {
+      border-color: rgba(76,100,217,.60);
+      box-shadow: 0 0 0 3px rgba(76,100,217,.16), inset 0 1px 3px rgba(0,0,0,.18);
+      background: var(--glass-card-md);
+    }
+
+    .input-neu {
+      width: 100%; padding: var(--sp-12) var(--sp-16); min-height: 44px;
+      font-family: var(--font-sans); font-size: var(--fs-base); color: var(--text-primary);
+      background: var(--neu-bg); border: 1px solid rgba(255,255,255,.04);
+      border-radius: var(--r-lg); outline: none; box-shadow: var(--neu-inset);
+      transition: all var(--t-base) var(--ease-glass);
+    }
+    .input-neu::placeholder { color: var(--text-tertiary); }
+    .input-neu:focus {
+      box-shadow: var(--neu-inset-md), 0 0 0 2px rgba(76,100,217,.22);
+      border-color: rgba(76,100,217,.30);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       TOGGLE (Neuformismo)
+    ══════════════════════════════════════════════════════ */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-14, 14px) var(--sp-16); border-radius: var(--r-md);
+    }
+    .toggle-info { display: flex; flex-direction: column; gap: 2px; }
+    .toggle-title { font-size: var(--fs-base); font-weight: var(--fw-semi); }
+    .toggle-desc  { font-size: var(--fs-xs); color: var(--text-tertiary); }
+
+    .toggle { position: relative; width: 52px; height: 28px; cursor: pointer; flex-shrink: 0; }
+    .toggle input { display: none; }
+    .toggle-track {
+      display: block; width: 52px; height: 28px; border-radius: var(--r-full);
+      background: var(--neu-bg-3); box-shadow: var(--neu-inset); position: relative;
+      transition: all var(--t-base) var(--ease-glass);
+    }
+    .toggle-thumb {
+      position: absolute; top: 4px; left: 4px; width: 20px; height: 20px;
+      border-radius: 50%; background: var(--neu-bg-2); box-shadow: var(--neu-sm);
+      transition: all var(--t-base) var(--ease-spring);
+    }
+    .toggle input:checked + .toggle-track {
+      background: rgba(76,100,217,.30);
+      box-shadow: var(--neu-inset), var(--neu-glow-brand);
+    }
+    .toggle input:checked + .toggle-track .toggle-thumb {
+      transform: translateX(24px);
+      background: var(--brand-indigo);
+      box-shadow: 2px 2px 6px rgba(0,0,0,.4), 0 0 14px rgba(76,100,217,.55);
+    }
+
+    /* ══════════════════════════════════════════════════════
+       PROGRESS BARS
+    ══════════════════════════════════════════════════════ */
+    .progress-list { display: flex; flex-direction: column; gap: var(--sp-16); }
+    .progress-item { display: flex; flex-direction: column; gap: var(--sp-8); }
+    .progress-meta { display: flex; justify-content: space-between; align-items: center; }
+    .progress-name { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--text-secondary); }
+    .progress-val  { font-size: var(--fs-sm); font-weight: var(--fw-semi);   color: var(--text-primary);   }
+    .progress-track {
+      height: 8px; background: rgba(255,255,255,.07); border-radius: var(--r-full);
+      overflow: hidden; box-shadow: inset 0 1px 4px rgba(0,0,0,.30);
+    }
+    .progress-fill {
+      height: 100%; border-radius: var(--r-full);
+      background: linear-gradient(90deg, var(--brand-indigo), #8aa5ff);
+      box-shadow: 0 0 8px rgba(76,100,217,.50);
+      transition: width 1s var(--ease-spring);
+    }
+    .progress-fill.c-success { background: linear-gradient(90deg, #16a34a, #4ade80); box-shadow: 0 0 8px rgba(34,197,94,.42); }
+    .progress-fill.c-warning { background: linear-gradient(90deg, #d97706, #fbbf24); box-shadow: 0 0 8px rgba(251,191,36,.42); }
+
+    /* ══════════════════════════════════════════════════════
+       TABLE
+    ══════════════════════════════════════════════════════ */
+    .table-wrap {
+      background: var(--glass-card); backdrop-filter: var(--blur-md);
+      border: var(--glass-border-sm); border-radius: var(--r-xl);
+      overflow: hidden; box-shadow: var(--glass-shadow-md);
+    }
+    .ds-table { width: 100%; border-collapse: collapse; font-size: var(--fs-base); }
+    .ds-table thead tr { background: rgba(255,255,255,.05); border-bottom: var(--glass-border-xs); }
+    .ds-table th { padding: var(--sp-12) var(--sp-20); text-align: left; font-size: 11px; font-weight: var(--fw-semi); letter-spacing: .08em; text-transform: uppercase; color: var(--text-tertiary); }
+    .ds-table td { padding: var(--sp-16) var(--sp-20); color: var(--text-secondary); border-bottom: 1px solid rgba(255,255,255,.04); }
+    .ds-table td:first-child { color: var(--text-primary); font-weight: var(--fw-medium); }
+    .ds-table tbody tr:hover td { background: rgba(255,255,255,.04); }
+    .ds-table tbody tr:last-child td { border-bottom: none; }
+
+    /* ══════════════════════════════════════════════════════
+       TOAST / NOTIFICATIONS
+    ══════════════════════════════════════════════════════ */
+    .toast {
+      display: flex; align-items: flex-start; gap: var(--sp-12);
+      padding: var(--sp-16) var(--sp-20);
+      background: var(--glass-card-lg); backdrop-filter: var(--blur-lg);
+      border: var(--glass-border-sm); border-radius: var(--r-xl);
+      box-shadow: var(--glass-shadow-md); position: relative; overflow: hidden;
+    }
+    .toast::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+    .toast-success::before { background: linear-gradient(180deg, #4ade80, #16a34a); }
+    .toast-warning::before { background: linear-gradient(180deg, #fbbf24, #d97706); }
+    .toast-info::before    { background: linear-gradient(180deg, #8aa5ff, var(--brand-indigo)); }
+    .toast-icon    { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .toast-body    { flex: 1; }
+    .toast-title   { font-size: var(--fs-base); font-weight: var(--fw-semi); margin-bottom: 2px; }
+    .toast-msg     { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+    /* ══════════════════════════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════════════════════════ */
+    .glass-sidebar {
+      background: var(--glass-nav); backdrop-filter: var(--blur-lg);
+      border: var(--glass-border-xs); border-radius: var(--r-xl);
+      padding: var(--sp-20); box-shadow: var(--glass-shadow-md);
+    }
+    .sidebar-group-label {
+      font-size: 10px; font-weight: var(--fw-semi); letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-tertiary); padding: var(--sp-8) var(--sp-12); margin-bottom: var(--sp-4);
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: var(--sp-12);
+      padding: var(--sp-10) var(--sp-12); border-radius: var(--r-md);
+      color: var(--text-secondary); font-size: var(--fs-base); font-weight: var(--fw-medium);
+      cursor: pointer; text-decoration: none; margin-bottom: var(--sp-4);
+      transition: all var(--t-fast) var(--ease-glass);
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,.08); color: var(--text-primary); }
+    .sidebar-item.active { background: var(--glass-brand); border: var(--glass-border-brand); color: var(--text-brand); }
+    .s-icon { width: 18px; height: 18px; opacity: .65; flex-shrink: 0; }
+    .sidebar-item.active .s-icon { opacity: 1; }
+
+    /* ══════════════════════════════════════════════════════
+       FEATURE CARDS (Neu)
+    ══════════════════════════════════════════════════════ */
+    .feature-icon-wrap {
+      width: 48px; height: 48px; border-radius: var(--r-lg);
+      background: var(--neu-bg-2); box-shadow: var(--neu-sm);
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+      margin-bottom: var(--sp-16);
+    }
+    .feature-title { font-size: var(--fs-md); font-weight: var(--fw-semi); margin-bottom: var(--sp-8); }
+    .feature-desc  { font-size: var(--fs-sm); color: var(--text-secondary); line-height: 1.55; }
+
+    /* ══════════════════════════════════════════════════════
+       COLOR SWATCHES
+    ══════════════════════════════════════════════════════ */
+    .swatch-bg { height: 56px; border-radius: var(--r-md); margin-bottom: var(--sp-12); }
+    .swatch-name  { font-size: var(--fs-sm); font-weight: var(--fw-semi); }
+    .swatch-hex   { font-size: 11px; color: var(--text-tertiary); font-family: monospace; margin-top: 2px; }
+
+    /* ══════════════════════════════════════════════════════
+       TOKEN TABLE
+    ══════════════════════════════════════════════════════ */
+    .token-row {
+      display: flex; align-items: center; gap: var(--sp-16);
+      padding: var(--sp-12) var(--sp-16); border-radius: var(--r-md);
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .token-row:last-child { border-bottom: none; }
+    .token-row:hover { background: rgba(255,255,255,.04); }
+    .token-name { font-size: var(--fs-sm); font-family: monospace; color: var(--text-brand); min-width: 200px; }
+    .token-value { font-size: var(--fs-sm); color: var(--text-secondary); flex: 1; font-family: monospace; }
+    .token-preview { width: 32px; height: 32px; border-radius: var(--r-sm); flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════ */
+    .glass-footer {
+      padding: var(--sp-40) var(--sp-24);
+      background: var(--glass-nav);
+      backdrop-filter: var(--blur-md);
+      border-top: var(--glass-border-xs);
+      text-align: center;
+    }
+    .footer-wordmark { font-size: 20px; font-weight: var(--fw-display); letter-spacing: -.02em; margin-bottom: var(--sp-8); }
+    .footer-wordmark .dot { color: var(--brand-indigo); }
+    .footer-links { display: flex; align-items: center; justify-content: center; gap: var(--sp-24); flex-wrap: wrap; }
+    .footer-links a { font-size: var(--fs-sm); color: var(--text-tertiary); text-decoration: none; transition: color var(--t-fast); }
+    .footer-links a:hover { color: var(--text-brand); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="glass-nav" role="banner">
+  <div class="glass-nav-inner">
+    <div class="nav-logo">
+      <span class="nav-logo-text">actuaria<span class="nav-logo-dot">·</span></span>
+      <span class="nav-version">Liquid DS v3</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#tokens">Tokens</a></li>
+      <li><a href="#glass">Glass</a></li>
+      <li><a href="#neu">Neumorphism</a></li>
+      <li><a href="#hybrid">Híbrido</a></li>
+    </ul>
+    <nav class="nav-cta" aria-label="Acciones principales">
+      <button class="btn btn-ghost btn-sm btn-pill">Figma</button>
+      <button class="btn btn-glass-solid btn-sm btn-pill">Get Started</button>
+    </nav>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="section aurora hero" aria-label="Hero">
+  <div class="container">
+    <div class="hero-pill">Actuaria Design System v3.0</div>
+    <h1 class="hero-title">Liquid Glass<br><span class="gradient-text">× Neuformismo</span></h1>
+    <p class="hero-sub">
+      Un sistema de diseño premium que fusiona las superficies translúcidas de Apple Liquid Glass
+      con la profundidad táctil del Neumorphism — para interfaces actuariales de próxima generación.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-glass-solid btn-lg btn-pill">Explorar componentes</button>
+      <button class="btn btn-ghost btn-lg btn-pill">Ver en GitHub →</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ TOKENS ═══════════ -->
+<section id="tokens" class="section aurora">
+  <div class="container">
+    <div class="section-eyebrow"><span></span>Design Tokens</div>
+    <h2 class="section-title">Paleta y Variables</h2>
+    <p class="section-desc">Variables CSS que definen ambos sistemas visuales — glass surfaces, blur levels, neumorphic shadows y brand colors.</p>
+
+    <div class="grid-4 mb-32">
+      <!-- Brand Indigo -->
+      <div class="glass-card" style="padding: var(--sp-20);">
+        <div class="swatch-bg" style="background:#4c64d9; box-shadow:0 8px 24px rgba(76,100,217,.45);"></div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="swatch-name">Brand Indigo</div>
+            <div class="swatch-hex">--brand-indigo / #4c64d9</div>
+          </div>
+          <span class="badge badge-brand">Primary</span>
+        </div>
+      </div>
+      <!-- Brand Navy -->
+      <div class="glass-card" style="padding: var(--sp-20);">
+        <div class="swatch-bg" style="background:#151f47; border:var(--glass-border-sm);"></div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="swatch-name">Brand Navy</div>
+            <div class="swatch-hex">--brand-navy / #151f47</div>
+          </div>
+          <span class="badge badge-brand">Surface</span>
+        </div>
+      </div>
+      <!-- Glass Brand -->
+      <div class="glass-card" style="padding: var(--sp-20);">
+        <div class="swatch-bg" style="background:rgba(76,100,217,.20); backdrop-filter:blur(10px); border:1px solid rgba(76,100,217,.45);"></div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="swatch-name">Glass Brand</div>
+            <div class="swatch-hex">--glass-brand</div>
+          </div>
+          <span class="badge badge-brand">Glass</span>
+        </div>
+      </div>
+      <!-- Neu Base -->
+      <div class="glass-card" style="padding: var(--sp-20);">
+        <div class="swatch-bg" style="background:var(--neu-bg); box-shadow:var(--neu-sm);"></div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="swatch-name">Neu Base</div>
+            <div class="swatch-hex">--neu-bg / #1e2645</div>
+          </div>
+          <span class="badge badge-brand">Neu</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token reference table -->
+    <div class="glass-card" style="padding: 0;">
+      <div style="padding: var(--sp-20) var(--sp-24); border-bottom: var(--glass-border-xs);">
+        <div style="font-size:16px; font-weight:700;">Tokens de Shadow — Neuformismo</div>
+      </div>
+      <div class="token-row">
+        <div class="token-name">--neu-sm</div>
+        <div class="token-value">4px 4px 8px #141929, -4px -4px 8px #283668</div>
+        <div class="token-preview" style="background:var(--neu-bg); box-shadow:var(--neu-sm);"></div>
+      </div>
+      <div class="token-row">
+        <div class="token-name">--neu-md</div>
+        <div class="token-value">8px 8px 16px #141929, -8px -8px 16px #283668</div>
+        <div class="token-preview" style="background:var(--neu-bg); box-shadow:var(--neu-md);"></div>
+      </div>
+      <div class="token-row">
+        <div class="token-name">--neu-lg</div>
+        <div class="token-value">12px 12px 24px #141929, -12px -12px 24px #283668</div>
+        <div class="token-preview" style="background:var(--neu-bg); box-shadow:var(--neu-lg);"></div>
+      </div>
+      <div class="token-row">
+        <div class="token-name">--neu-inset</div>
+        <div class="token-value">inset 4px 4px 8px #141929, inset -4px -4px 8px #283668</div>
+        <div class="token-preview" style="background:var(--neu-bg); box-shadow:var(--neu-inset);"></div>
+      </div>
+      <div class="token-row">
+        <div class="token-name">--blur-md</div>
+        <div class="token-value">blur(20px) — glass card surface</div>
+        <div class="token-preview" style="background:var(--glass-card); backdrop-filter:var(--blur-md); border:var(--glass-border-sm);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ LIQUID GLASS ═══════════ -->
+<section id="glass" class="section aurora">
+  <div class="container">
+    <div class="section-eyebrow"><span></span>Liquid Glass</div>
+    <h2 class="section-title">Componentes Glass</h2>
+    <p class="section-desc">Superficies translúcidas con backdrop-filter, refracción de luz y bordes luminosos. Inspirado en Apple iOS 26 / macOS 26.</p>
+
+    <!-- Buttons showcase -->
+    <div class="glass-card mb-24" style="padding: var(--sp-32);">
+      <div style="font-size:13px; font-weight:600; color:var(--text-tertiary); letter-spacing:.08em; text-transform:uppercase; margin-bottom: var(--sp-20);">Botones Glass</div>
+      <div class="flex gap-16 items-center flex-wrap">
+        <button class="btn btn-glass-solid btn-pill">Solid Glass</button>
+        <button class="btn btn-glass btn-pill">Translucent</button>
+        <button class="btn btn-ghost btn-pill">Ghost</button>
+        <button class="btn btn-glass-solid btn-sm btn-pill">Small</button>
+        <button class="btn btn-glass-solid btn-lg btn-pill">Large</button>
+        <button class="btn btn-glass btn-pill btn-sm">⬇ Export</button>
+      </div>
+    </div>
+
+    <!-- Metric cards -->
+    <div class="grid-4 mb-24">
+      <div class="glass-card">
+        <div class="metric-icon metric-icon-glass">📊</div>
+        <div class="metric-value">$2.4M</div>
+        <div class="metric-label">Reservas Totales</div>
+        <span class="metric-delta delta-up">↑ 12.3%</span>
+      </div>
+      <div class="glass-card glass-card-brand">
+        <div class="metric-icon metric-icon-glass">⚡</div>
+        <div class="metric-value" style="color:var(--text-brand);">98.2%</div>
+        <div class="metric-label">Uptime SLA</div>
+        <span class="metric-delta delta-up">↑ 0.4%</span>
+      </div>
+      <div class="glass-card">
+        <div class="metric-icon metric-icon-glass">👥</div>
+        <div class="metric-value">6,041</div>
+        <div class="metric-label">Clientes Activos</div>
+        <span class="metric-delta delta-up">↑ 8.1%</span>
+      </div>
+      <div class="glass-card glass-card-iridescent">
+        <div class="metric-icon metric-icon-glass">⚠️</div>
+        <div class="metric-value" style="color:var(--text-warning);">3</div>
+        <div class="metric-label">Alertas Activas</div>
+        <span class="metric-delta delta-warn">+2 hoy</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <h3 style="font-size:20px; font-weight:700; margin-bottom: var(--sp-20);">Tabla Glass</h3>
+    <div class="table-wrap mb-24">
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Módulo</th>
+            <th>Versión</th>
+            <th>Estado</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Actuaria Plus</td>
+            <td>Reservas IBNR</td>
+            <td>v4.2.1</td>
+            <td><span class="badge badge-success">Activo</span></td>
+            <td><button class="btn btn-glass btn-sm btn-pill">Ver</button></td>
+          </tr>
+          <tr>
+            <td>Data Wave</td>
+            <td>Dashboard Analytics</td>
+            <td>v3.0.0</td>
+            <td><span class="badge badge-success">Activo</span></td>
+            <td><button class="btn btn-glass btn-sm btn-pill">Ver</button></td>
+          </tr>
+          <tr>
+            <td>Data Analytics</td>
+            <td>Modelo ML Deserción</td>
+            <td>v2.1.4</td>
+            <td><span class="badge badge-warning">Beta</span></td>
+            <td><button class="btn btn-glass btn-sm btn-pill">Ver</button></td>
+          </tr>
+          <tr>
+            <td>ActuaFast</td>
+            <td>Capital SCR</td>
+            <td>v1.0.0</td>
+            <td><span class="badge badge-danger">Dev</span></td>
+            <td><button class="btn btn-glass btn-sm btn-pill">Ver</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Toasts -->
+    <h3 style="font-size:20px; font-weight:700; margin-bottom: var(--sp-20);">Notificaciones Glass</h3>
+    <div style="display:flex; flex-direction:column; gap: var(--sp-12);">
+      <div class="toast toast-success" role="status">
+        <span class="toast-icon">✅</span>
+        <div class="toast-body">
+          <div class="toast-title">Cálculo completado</div>
+          <div class="toast-msg">Reservas IBNR actualizadas — 2,341 registros procesados en 1.2s</div>
+        </div>
+      </div>
+      <div class="toast toast-warning" role="status">
+        <span class="toast-icon">⚠️</span>
+        <div class="toast-body">
+          <div class="toast-title">Advertencia de datos</div>
+          <div class="toast-msg">3 pólizas con factores de riesgo atípicos — revisar antes de cerrar</div>
+        </div>
+      </div>
+      <div class="toast toast-info" role="status">
+        <span class="toast-icon">ℹ️</span>
+        <div class="toast-body">
+          <div class="toast-title">Actualización disponible</div>
+          <div class="toast-msg">Data Analytics v2.2.0 listo para deploy — mejoras en modelo de deserción</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ NEUFORMISMO ═══════════ -->
+<section id="neu" class="section neu-section">
+  <div class="container">
+    <div class="section-eyebrow"><span></span>Neuformismo</div>
+    <h2 class="section-title">Componentes Neumórficos</h2>
+    <p class="section-desc">Superficies extruidas con sombras duales (luz arriba-izquierda, oscuro abajo-derecha). Efecto táctil y físico sobre fondo plano.</p>
+
+    <!-- Neu buttons -->
+    <div class="neu-card mb-24" style="padding: var(--sp-32);">
+      <div style="font-size:13px; font-weight:600; color:var(--text-tertiary); letter-spacing:.08em; text-transform:uppercase; margin-bottom: var(--sp-20);">Botones Neumórficos</div>
+      <div class="flex gap-16 items-center flex-wrap">
+        <button class="btn btn-neu btn-pill">Default</button>
+        <button class="btn btn-neu-brand btn-pill">Brand</button>
+        <button class="btn btn-neu btn-sm btn-pill">Small</button>
+        <button class="btn btn-neu-brand btn-lg btn-pill">CTA Principal</button>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <!-- Feature cards -->
+      <div class="neu-card">
+        <div class="feature-icon-wrap">🧮</div>
+        <div class="feature-title">Cálculo en tiempo real</div>
+        <div class="feature-desc">Reservas, capital y primas calculados al instante con motores actuariales certificados ISO 9001.</div>
+      </div>
+      <div class="neu-card neu-card-pressed">
+        <div class="feature-icon-wrap">📈</div>
+        <div class="feature-title">Analytics avanzado</div>
+        <div class="feature-desc">Dashboards personalizados con KPIs actuariales y modelos predictivos ML integrados.</div>
+      </div>
+      <div class="neu-card">
+        <div class="feature-icon-wrap">🔐</div>
+        <div class="feature-title">ISO 27001 Compliance</div>
+        <div class="feature-desc">Arquitectura certificada con trazabilidad completa en cada operación del sistema.</div>
+      </div>
+
+      <!-- Neu inputs -->
+      <div class="neu-card col-span-2" style="padding:var(--sp-24);">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom: var(--sp-20);">Inputs Neumórficos</h3>
+        <div class="grid-2">
+          <div class="input-group">
+            <label class="input-label" for="inp-email">Correo corporativo</label>
+            <input class="input-neu" id="inp-email" type="email" placeholder="nombre@actuaria.com" autocomplete="email">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="inp-product">Producto</label>
+            <input class="input-neu" id="inp-product" type="text" placeholder="Actuaria Plus" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="neu-card" style="padding:var(--sp-24);">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom: var(--sp-16);">Toggles</h3>
+        <div style="display:flex; flex-direction:column; gap:var(--sp-4);">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-title">Notificaciones</div>
+              <div class="toggle-desc">Alertas en tiempo real</div>
+            </div>
+            <label class="toggle" aria-label="Notificaciones">
+              <input type="checkbox" checked>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-title">Modo oscuro</div>
+              <div class="toggle-desc">Interfaz dark permanente</div>
+            </div>
+            <label class="toggle" aria-label="Modo oscuro">
+              <input type="checkbox">
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-title">Auto-cálculo</div>
+              <div class="toggle-desc">Actualizar reservas al guardar</div>
+            </div>
+            <label class="toggle" aria-label="Auto-cálculo">
+              <input type="checkbox" checked>
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress + Badges -->
+    <div class="grid-2 mt-24">
+      <div class="neu-card" style="padding:var(--sp-24);">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom: var(--sp-20);">Indicadores de progreso</h3>
+        <div class="progress-list">
+          <div class="progress-item">
+            <div class="progress-meta">
+              <span class="progress-name">Reservas calculadas</span>
+              <span class="progress-val">87%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:87%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-meta">
+              <span class="progress-name">Cobertura de pólizas</span>
+              <span class="progress-val">94%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill c-success" style="width:94%"></div></div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-meta">
+              <span class="progress-name">Alertas pendientes</span>
+              <span class="progress-val">23%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill c-warning" style="width:23%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="neu-card" style="padding:var(--sp-24);">
+        <h3 style="font-size:16px; font-weight:700; margin-bottom: var(--sp-20);">Badges & Estados</h3>
+        <div style="display:flex; flex-wrap:wrap; gap:var(--sp-8);">
+          <span class="badge badge-brand">Activo</span>
+          <span class="badge badge-success">Completo</span>
+          <span class="badge badge-warning">En revisión</span>
+          <span class="badge badge-danger">Error</span>
+          <span class="badge badge-neu">Neutro</span>
+          <span class="badge badge-brand">v4.2.1</span>
+          <span class="badge badge-success">ISO 9001</span>
+          <span class="badge badge-success">ISO 27001</span>
+          <span class="badge badge-warning">Beta</span>
+          <span class="badge badge-danger">Deprecado</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════ HYBRID ═══════════ -->
+<section id="hybrid" class="section aurora">
+  <div class="container">
+    <div class="section-eyebrow"><span></span>Componentes Híbridos</div>
+    <h2 class="section-title">Glass + Neuformismo</h2>
+    <p class="section-desc">Composición de ambos sistemas — modales glass sobre fondos neumórficos, sidebars translúcidas con items extruidos.</p>
+
+    <div class="grid-2">
+      <!-- Modal -->
+      <div class="glass-card glass-card-modal" style="padding: var(--sp-32);">
+        <div class="flex justify-between items-center mb-20">
+          <div>
+            <span class="badge badge-brand mb-8" style="display:inline-flex;">Cálculo Actuarial</span>
+            <div style="font-size:18px; font-weight:700; margin-top:var(--sp-8);">Reservas IBNR — Q2 2026</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="border-radius:var(--r-md); padding: var(--sp-8); min-height:unset; width:36px; height:36px;" aria-label="Cerrar">✕</button>
+        </div>
+        <p style="font-size:14px; color:var(--text-secondary); line-height:1.65; margin-bottom:var(--sp-20);">
+          El cálculo de reservas IBNR para el segundo trimestre ha sido completado. Se procesaron 2,341 pólizas con una variación del 3.2% respecto al trimestre anterior.
+        </p>
+        <div class="input-group mb-16">
+          <label class="input-label" for="modal-obs">Observaciones</label>
+          <input class="input-glass" id="modal-obs" type="text" placeholder="Agregar comentario..." autocomplete="off">
+        </div>
+        <div class="flex gap-12">
+          <button class="btn btn-ghost btn-pill w-100">Cancelar</button>
+          <button class="btn btn-glass-solid btn-pill w-100">Confirmar</button>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="glass-sidebar">
+        <div class="sidebar-group-label">Principal</div>
+        <nav aria-label="Navegación principal">
+          <a class="sidebar-item active" href="#">
+            <svg class="s-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            Dashboard
+          </a>
+          <a class="sidebar-item" href="#">
+            <svg class="s-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Reservas
+          </a>
+          <a class="sidebar-item" href="#">
+            <svg class="s-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Analytics
+          </a>
+          <a class="sidebar-item" href="#">
+            <svg class="s-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            Compliance
+          </a>
+        </nav>
+        <div class="sidebar-group-label" style="margin-top:var(--sp-16);">Sistema</div>
+        <nav aria-label="Navegación sistema">
+          <a class="sidebar-item" href="#">
+            <svg class="s-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            Configuración
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="glass-footer aurora" role="contentinfo">
+  <div class="footer-wordmark">actuaria<span class="dot">·</span></div>
+  <div class="footer-links">
+    <a href="https://github.com/renatopuente-ux/design-system-actuaria-liquid">GitHub</a>
+    <a href="design-tokens-liquid.css">Tokens CSS</a>
+    <a href="#">Figma UI Kit</a>
+    <a href="#">Documentación</a>
+  </div>
+  <div style="font-size:12px; color:var(--text-tertiary); margin-top:var(--sp-12);">
+    Design System v3.0 · Liquid Glass × Neuformismo · ISO 9001:2015 · ISO/IEC 27001:2022 · © 2026 Actuaria Consultores
+  </div>
+</footer>
+
+</body>
+</html>

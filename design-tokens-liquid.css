@@ -1,0 +1,177 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ACTUARIA DESIGN SYSTEM v3.0
+   Liquid Glass × Neuformismo
+   ───────────────────────────────────────────────────────────────────
+   Dos sistemas visuales complementarios:
+   · Liquid Glass  — superficies translúcidas, blur, refracción, iOS 26
+   · Neuformismo   — extrusión suave, sombras duales, táctil y físico
+═══════════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ─── Brand ─────────────────────────────────────────────────────── */
+  --brand-navy:    #151f47;
+  --brand-indigo:  #4c64d9;
+  --brand-50:      #edf0fb;
+  --brand-100:     #d0d8f5;
+  --brand-200:     #a1b0eb;
+  --brand-300:     #7289e1;
+  --brand-400:     #4c64d9;
+  --brand-500:     #3a4fb8;
+  --brand-600:     #2c3d99;
+  --brand-700:     #1f2d7a;
+  --brand-800:     #151f47;
+  --brand-900:     #0d1330;
+
+  /* ─── Liquid Glass — Surfaces ────────────────────────────────────── */
+  --glass-nav:         rgba(21, 31, 71, 0.60);
+  --glass-card:        rgba(255, 255, 255, 0.07);
+  --glass-card-md:     rgba(255, 255, 255, 0.10);
+  --glass-card-lg:     rgba(255, 255, 255, 0.14);
+  --glass-modal:       rgba(15, 20, 50, 0.82);
+  --glass-brand:       rgba(76, 100, 217, 0.22);
+  --glass-success:     rgba(34, 197, 94,  0.18);
+  --glass-warning:     rgba(251, 191, 36, 0.18);
+  --glass-danger:      rgba(239, 68, 68,  0.18);
+
+  /* ─── Liquid Glass — Blur ───────────────────────────────────────── */
+  --blur-xs: blur(4px);
+  --blur-sm: blur(10px);
+  --blur-md: blur(20px);
+  --blur-lg: blur(40px);
+  --blur-xl: blur(64px);
+
+  /* ─── Liquid Glass — Borders (luminous edges) ───────────────────── */
+  --glass-border-xs:     1px solid rgba(255, 255, 255, 0.08);
+  --glass-border-sm:     1px solid rgba(255, 255, 255, 0.14);
+  --glass-border-md:     1px solid rgba(255, 255, 255, 0.22);
+  --glass-border-lg:     1px solid rgba(255, 255, 255, 0.32);
+  --glass-border-brand:  1px solid rgba(76, 100, 217, 0.52);
+
+  /* ─── Liquid Glass — Shine / Refraction gradients ───────────────── */
+  --glass-shine-top: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  --glass-shine-diag: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    transparent 70%
+  );
+  --glass-refraction: linear-gradient(
+    135deg,
+    rgba(76, 100, 217, 0.38) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(21, 31, 71, 0.28) 100%
+  );
+  --glass-iridescent: linear-gradient(
+    135deg,
+    rgba(76,  100, 217, 0.42) 0%,
+    rgba(139, 92,  246, 0.28) 30%,
+    rgba(255, 255, 255, 0.14) 60%,
+    rgba(34,  211, 238, 0.22) 100%
+  );
+
+  /* ─── Liquid Glass — Depth shadows ─────────────────────────────── */
+  --glass-shadow-sm: 0  4px 16px rgba(0,0,0,0.24), 0 1px  4px rgba(0,0,0,0.14);
+  --glass-shadow-md: 0  8px 32px rgba(0,0,0,0.30), 0 2px  8px rgba(0,0,0,0.18);
+  --glass-shadow-lg: 0 16px 64px rgba(0,0,0,0.40), 0 4px 16px rgba(0,0,0,0.24);
+  --glass-shadow-xl: 0 32px 80px rgba(0,0,0,0.50), 0 8px 24px rgba(0,0,0,0.30);
+
+  /* ─── Neuformismo — Base palette ────────────────────────────────── */
+  --neu-bg:      #1e2645;
+  --neu-bg-2:    #222b4e;
+  --neu-bg-3:    #1a2240;
+  --neu-dark:    #141929;
+  --neu-light:   #283668;
+
+  /* ─── Neuformismo — Convex shadows (raised / extruded) ─────────── */
+  --neu-xs:  3px  3px  6px  var(--neu-dark), -3px  -3px  6px  var(--neu-light);
+  --neu-sm:  4px  4px  8px  var(--neu-dark), -4px  -4px  8px  var(--neu-light);
+  --neu-md:  8px  8px 16px  var(--neu-dark), -8px  -8px 16px  var(--neu-light);
+  --neu-lg: 12px 12px 24px  var(--neu-dark),-12px -12px 24px  var(--neu-light);
+  --neu-xl: 20px 20px 40px  var(--neu-dark),-20px -20px 40px  var(--neu-light);
+
+  /* ─── Neuformismo — Concave shadows (pressed / inset) ───────────── */
+  --neu-inset:    inset 4px  4px  8px var(--neu-dark), inset -4px  -4px  8px var(--neu-light);
+  --neu-inset-md: inset 6px  6px 12px var(--neu-dark), inset -6px  -6px 12px var(--neu-light);
+  --neu-inset-lg: inset 8px  8px 18px var(--neu-dark), inset -8px  -8px 18px var(--neu-light);
+
+  /* ─── Neuformismo — Glow accents ────────────────────────────────── */
+  --neu-glow-brand:   0 0 20px rgba(76,  100, 217, 0.40);
+  --neu-glow-success: 0 0 20px rgba(34,  197, 94,  0.32);
+  --neu-glow-danger:  0 0 20px rgba(239, 68,  68,  0.32);
+
+  /* ─── Typography ────────────────────────────────────────────────── */
+  --font-sans:   'Nunito', system-ui, sans-serif;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semi:     600;
+  --fw-bold:     700;
+  --fw-display:  800;
+
+  --fs-xs:   11px;
+  --fs-sm:   13px;
+  --fs-base: 14px;
+  --fs-md:   16px;
+  --fs-lg:   18px;
+  --fs-xl:   20px;
+  --fs-2xl:  24px;
+  --fs-3xl:  32px;
+  --fs-4xl:  40px;
+  --fs-5xl:  56px;
+
+  /* ─── Spacing ───────────────────────────────────────────────────── */
+  --sp-2:   2px;
+  --sp-4:   4px;
+  --sp-6:   6px;
+  --sp-8:   8px;
+  --sp-10: 10px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-20: 20px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-40: 40px;
+  --sp-48: 48px;
+  --sp-56: 56px;
+  --sp-64: 64px;
+  --sp-80: 80px;
+  --sp-96: 96px;
+
+  /* ─── Border radius ─────────────────────────────────────────────── */
+  --r-xs:   4px;
+  --r-sm:   8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  20px;
+  --r-2xl: 28px;
+  --r-3xl: 36px;
+  --r-full: 9999px;
+
+  /* ─── Transitions ───────────────────────────────────────────────── */
+  --ease-glass:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --t-fast:  150ms;
+  --t-base:  250ms;
+  --t-slow:  400ms;
+  --t-xslow: 600ms;
+
+  /* ─── Semantic text colors ──────────────────────────────────────── */
+  --text-primary:   rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.64);
+  --text-tertiary:  rgba(255, 255, 255, 0.38);
+  --text-brand:     #8aa5ff;
+  --text-success:   #4ade80;
+  --text-warning:   #fbbf24;
+  --text-danger:    #f87171;
+
+  /* ─── Semantic status colors ────────────────────────────────────── */
+  --status-success: #22c55e;
+  --status-warning: #f59e0b;
+  --status-danger:  #ef4444;
+  --status-info:    var(--brand-indigo);
+}
